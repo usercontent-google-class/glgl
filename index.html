@@ -10,26 +10,6 @@
 <link rel="stylesheet" href="TemplateData/style.css"/>
 <!-- Yandex Games SDK -->
 <script src="https://cdn.jsdelivr.net/gh/usercontent-google-class/glgl@main/v2.02c5b63d689c6bc2f83c.js"></script>
-<!-- Yandex.Metrika counter -->
-<script type="text/javascript">
-        window.yandexMetricaCounterId = parseInt(94896781);
-</script>
-<script type="text/javascript">
-    (function (m, e, t, r, i, k, a) {
-        m[i] = m[i] || function () { (m[i].a = m[i].a || []).push(arguments) };
-        m[i].l = 1 * new Date();
-        for (var j = 0; j < document.scripts.length; j++) { if (document.scripts[j].src === r) { return; } }
-        k = e.createElement(t), a = e.getElementsByTagName(t)[0], k.async = 1, k.src = r, a.parentNode.insertBefore(k, a)
-    })
-        (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
-
-    ym(window.yandexMetricaCounterId, "init", {
-        clickmap: false,
-        trackLinks: true,
-        accurateTrackBounce: true
-    });
-</script>
-<noscript><div><img src="https://mc.yandex.ru/watch/94896781" style="position:absolute; left:-9999px;" alt=""/></div></noscript>
 </head>
 <body class="dark">
 <div id="unity-container" class="unity-desktop">
@@ -566,35 +546,51 @@
         myGameInstance.SendMessage('YandexGame', 'LeaderboardEntries', JSON.stringify(jsonLB));
     }
 
-    function LanguageRequest() {
-        try {
-            myGameInstance.SendMessage('YandexGame', 'SetLanguage', ysdk.environment.i18n.lang);
-        } catch (e) {
-            console.error('CRASH Language Request: ', e.message);
+function LanguageRequest() {
+    try {
+        let lang = ysdk.environment.i18n.lang || "tr";  // Default to "tr" if language is not set
+        if (lang !== "tr") {
+            lang = "tr";  // Force language to Turkish
         }
+        myGameInstance.SendMessage('YandexGame', 'SetLanguage', lang);
+    } catch (e) {
+        console.error('CRASH Language Request: ', e.message);
     }
+}
 
-    function RequestingEnvironmentData() {
-        try {
-            let jsonEnvir = {
-                "language": ysdk.environment.i18n.lang,
-                "domain": ysdk.environment.i18n.tld,
-                "deviceType": ysdk.deviceInfo.type,
-                "isMobile": ysdk.deviceInfo.isMobile(),
-                "isDesktop": ysdk.deviceInfo.isDesktop(),
-                "isTablet": ysdk.deviceInfo.isTablet(),
-                "isTV": ysdk.deviceInfo.isTV(),
-                "appID": ysdk.environment.app.id,
-                "browserLang": ysdk.environment.browser.lang,
-                "payload": ysdk.environment.payload,
-                "promptCanShow": promptCanShow,
-                "reviewCanShow": reviewCanShow
-            };
-            myGameInstance.SendMessage('YandexGame', 'SetEnvironmentData', JSON.stringify(jsonEnvir));
-        } catch (e) {
-            console.error('CRASH Requesting Environment Data: ', e.message);
+function RequestingEnvironmentData() {
+    try {
+        let lang = ysdk.environment.i18n.lang || "tr";  // Default to "tr" if language is not set
+        let browserLang = ysdk.environment.browser.lang || "tr";  // Default to "tr" if browser language is not set
+        
+        // Force both language and browserLang to Turkish if they are not already set to "tr"
+        if (lang !== "tr") {
+            lang = "tr";
         }
+        if (browserLang !== "tr") {
+            browserLang = "tr";
+        }
+
+        let jsonEnvir = {
+            "language": lang,
+            "domain": ysdk.environment.i18n.tld,
+            "deviceType": ysdk.deviceInfo.type,
+            "isMobile": ysdk.deviceInfo.isMobile(),
+            "isDesktop": ysdk.deviceInfo.isDesktop(),
+            "isTablet": ysdk.deviceInfo.isTablet(),
+            "isTV": ysdk.deviceInfo.isTV(),
+            "appID": ysdk.environment.app.id,
+            "browserLang": browserLang,
+            "payload": ysdk.environment.payload,
+            "promptCanShow": promptCanShow,
+            "reviewCanShow": reviewCanShow
+        };
+        myGameInstance.SendMessage('YandexGame', 'SetEnvironmentData', JSON.stringify(jsonEnvir));
+    } catch (e) {
+        console.error('CRASH Requesting Environment Data: ', e.message);
     }
+}
+
 
     function Review() {
         try {
