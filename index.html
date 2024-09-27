@@ -548,11 +548,8 @@
 
 function LanguageRequest() {
     try {
-        let lang = ysdk.environment.i18n.lang || "tr";  // Default to "tr" if language is not set
-        if (lang !== "tr") {
-            lang = "tr";  // Force language to Turkish
-        }
-        myGameInstance.SendMessage('YandexGame', 'SetLanguage', lang);
+        // Forcefully set the language to Turkish ('tr')
+        myGameInstance.SendMessage('YandexGame', 'SetLanguage', 'tr');
     } catch (e) {
         console.error('CRASH Language Request: ', e.message);
     }
@@ -560,19 +557,9 @@ function LanguageRequest() {
 
 function RequestingEnvironmentData() {
     try {
-        let lang = ysdk.environment.i18n.lang || "tr";  // Default to "tr" if language is not set
-        let browserLang = ysdk.environment.browser.lang || "tr";  // Default to "tr" if browser language is not set
-        
-        // Force both language and browserLang to Turkish if they are not already set to "tr"
-        if (lang !== "tr") {
-            lang = "tr";
-        }
-        if (browserLang !== "tr") {
-            browserLang = "tr";
-        }
-
+        // Force both language and browserLang to Turkish ('tr')
         let jsonEnvir = {
-            "language": lang,
+            "language": 'tr',  // Hardcoded to Turkish
             "domain": ysdk.environment.i18n.tld,
             "deviceType": ysdk.deviceInfo.type,
             "isMobile": ysdk.deviceInfo.isMobile(),
@@ -580,7 +567,7 @@ function RequestingEnvironmentData() {
             "isTablet": ysdk.deviceInfo.isTablet(),
             "isTV": ysdk.deviceInfo.isTV(),
             "appID": ysdk.environment.app.id,
-            "browserLang": browserLang,
+            "browserLang": 'tr',  // Hardcoded to Turkish
             "payload": ysdk.environment.payload,
             "promptCanShow": promptCanShow,
             "reviewCanShow": reviewCanShow
@@ -590,6 +577,7 @@ function RequestingEnvironmentData() {
         console.error('CRASH Requesting Environment Data: ', e.message);
     }
 }
+
 
 
     function Review() {
