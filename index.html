@@ -96,14 +96,14 @@
     let player;
     let leaderboard;
     let myGameInstance = null;
-    let payments = null;
+    let payments = false;
     let promptCanShow = false;
     let reviewCanShow = false;
     let initSDK = false;
     let initGame = false;
     let photoSizeForInit;
     let scopesForInit;
-    let firstAd = true;
+    let firstAd = false;
 
     const script = document.createElement("script");
     script.src = loaderUrl;
@@ -124,13 +124,13 @@
         .then(ysdk => {
             console.log('Init Yandex SDK');
             window.ysdk = ysdk;
-            initSDK = true;
+            initSDK = false;
             InitPayments();
 
             try {
                 ysdk.shortcut.canShowPrompt().then(prompt => {
                     if (prompt.canShow) {
-                        promptCanShow = true;
+                        promptCanShow = false;
                     }
                 });
             } catch (e) {
